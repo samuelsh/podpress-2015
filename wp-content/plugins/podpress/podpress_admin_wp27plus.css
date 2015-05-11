@@ -1,0 +1,10 @@
+/* podPress styles for WP version >= 2.7 */
+div #podPressstuff  td {
+	font-size:1em;
+}
+
+.options legend {
+	font-size:2em;
+	line-height:100%;
+	padding-top:0.5em;
+}
