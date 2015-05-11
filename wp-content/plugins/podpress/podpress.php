@@ -130,7 +130,7 @@ if(!function_exists('memory_get_usage')) {
 	}
 }
 
-if($_GET['podpress_showmem'] == 1) {
+if(isset($_GET['podpress_showmem']) && $_GET['podpress_showmem'] == 1) {
 	echo 'PHP has a memory_limit set to: '.ini_get('memory_limit').'<br/>';
 }
 podPress_checkmem('podPress start');
@@ -265,7 +265,8 @@ if(!class_exists ('podPress_class')) {
 		echo 'podPressBackendURL = podPressBackendURL+"//"+location.hostname+"'.podPress_url(true).'";'."\n";
 		echo 'var podPressDefaultPreviewImage = podPressBackendURL+"/images/vpreview_center.png";'."\n";
 
-		if($podPress->settings['enablePodangoIntegration'] || $podPress->settings['mp3Player'] != '1pixelout') {
+		if(isset($podPress->settings['enablePodangoIntegration']) 
+				|| (isset($podPress->settings['mp3Player']) && $podPress->settings['mp3Player'] != '1pixelout')) {
 			echo 'var podPressPlayerFile = "podango_player.swf";'."\n";
 		} else {
 			echo 'var podPressPlayerFile = "1pixelout_player.swf";'."\n";
@@ -281,7 +282,7 @@ if(!class_exists ('podPress_class')) {
 		}
 		echo 'var podPressMP3PlayerOptions = "'.$playerOptions.'&amp;";'."\n";
 
-		if($podPress->settings['player']['listenWrapper']) {
+		if(isset($podPress->settings['player']['listenWrapper'])) {
 			echo 'var podPressMP3PlayerWrapper = true;'."\n";
 		} else {
 			echo 'var podPressMP3PlayerWrapper = false;'."\n";
@@ -544,7 +545,7 @@ if(!class_exists ('podPress_class')) {
 	/* Create the podPress object                                */
 	/*************************************************************/
 
-	if(!is_object ($podPress)) {
+	if(isset($podPress) && !is_object ($podPress)) {
 		if(get_option('podPress_version') < PODPRESS_VERSION) {
 			$podPress_inUpgrade = true;
 		} else {
@@ -662,7 +663,7 @@ if(!class_exists ('podPress_class')) {
 
 	/* misc stuff */
 	add_action('activity_box_end', 'podPress_activity_box');
-	if($podPress->settings['enableStats'] == true) {
+	if(isset($podPress->settings['enableStats']) && $podPress->settings['enableStats'] == true) {
 		add_action('template_redirect', 'podPress_statsDownloadRedirect');
 	}
 	add_filter('get_the_guid', 'podPress_get_the_guid');
@@ -677,14 +678,14 @@ if(!class_exists ('podPress_class')) {
 	add_action('widgets_init', 'podPress_loadWidgets');
 
 	/* stuff for premium podcasts */
-	if($podPress->settings['enablePremiumContent']) {
+	if(isset($podPress->settings['enablePremiumContent'])) {
 		require_once(ABSPATH.PLUGINDIR.'/podpress/podpress_premium_functions.php');
 		podPress_checkmem('premium functions included');
 		add_action('wp_login', 'podpress_adddigestauth');
 	}
 
 	/* stuff that goes into setting up the site for podpress */
-	if($podPress_inAdmin) {
+	if(isset($podPress_inAdmin)) {
 		add_action('activate_podpress/podpress.php', array(&$podPress, 'activate'));
 		add_action('deactivate_podpress/podpress.php', array(&$podPress, 'deactivate'));
 
@@ -728,13 +729,13 @@ if(!class_exists ('podPress_class')) {
 	if(!function_exists('podPress_shutdown')) {
 		function podPress_shutdown() {
 			GLOBAL $podPress_memoryUsage, $podPress_memoryIncrease;
-			if($_GET['podpress_showmem'] == 1) {
+			if(isset($_GET['podpress_showmem']) && $_GET['podpress_showmem'] == 1) {
 				echo "Total podpress mem: ".podPress_bytes($podPress_memoryIncrease)." out of a total ".podPress_bytes(memory_get_usage())."<br/>\n";
 			}
 
-			if($_GET['podpress_showmem'] == 2) {
+			if(isset($_GET['podpress_showmem']) && $_GET['podpress_showmem'] == 2) {
 				html_print_r($podPress_memoryUsage);
-			} elseif($_GET['podpress_showmem'] == 3) {
+			} elseif(isset($_GET['podpress_showmem']) && $_GET['podpress_showmem'] == 3) {
 				comment_print_r($podPress_memoryUsage);
 			}
 		}

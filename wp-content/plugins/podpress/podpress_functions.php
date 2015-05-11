@@ -61,10 +61,10 @@ License:
 				$result .= '/';
 			}
 
-			if($urlparts['query'] != '') {
+			if(!empty($urlparts['query'])) {
 				$result .= '?'.$urlparts['query'];
 			}
-			if($urlparts['fragment'] != '') {
+			if(!empty($urlparts['fragment'])) {
 				$result .= '#'.$urlparts['fragment'];
 			}
 			if($noDomain) {
