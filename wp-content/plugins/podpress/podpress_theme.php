@@ -21,7 +21,7 @@ License:
 */
 	if(!function_exists('podPress_webContent')) {
 		function podPress_webContent($podPressTemplateData, $content, $podcastTagEx_regexp) { // BB Dev: pg
-		GLOBAL $podPress;
+		global $podPress;
 		$divider                    = ' | ';
 		$podPressContent            = '';
 		$podPressMissedContent      = ''; // BB Dev: pg
@@ -59,7 +59,7 @@ License:
 					$val['enableDownload'] = false;
 				}
 			}
-			if($val['enableTorrentDownload']) {
+			if(isset($val['enableTorrentDownload'])) {
 				$podPressContent .= '<a href="'.$val['URI_torrent'].'" target="new">';
 				if(strstr($val['image'], '_button')) {
 					$torrentimg = 'misc_torrent_button.png';
@@ -88,7 +88,7 @@ License:
 					if($dividerNeeded) {
 						$podPressContent .= $divider;
 					}
-					if($val['disablePreview'] == 'on') {
+					if(isset($val['disablePreview']) && $val['disablePreview'] == 'on') {
 						$previewVal = 'nopreview';
 					} else {
 						$previewVal = 'false';

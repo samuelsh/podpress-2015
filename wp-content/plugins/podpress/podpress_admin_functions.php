@@ -871,8 +871,8 @@ License:
 	}
 	
 	function podPress_getID3tags($mediafile, $resolved = false, $limitDownload = false) {
-		GLOBAL $podPress;
-		if($podPress->settings['enablePodangoIntegration']) {
+		global $podPress;
+		if(isset($podPress->settings['enablePodangoIntegration'])) {
 			if(substr($mediafile, 0, strlen('Podango:')) == 'Podango:') {
 				$fileNameParts = explode(':', $mediafile);
 				$mediafile = 'http://download.podango.com/mediatracker/555/'.$fileNameParts[3].'/'.$fileNameParts[4];
@@ -971,8 +971,8 @@ License:
 
 	function podPress_getDuration($mediafile)
 	{
-		GLOBAL $podPress;
-		if($podPress->settings['enablePodangoIntegration']) {
+		global $podPress;
+		if(isset($podPress->settings['enablePodangoIntegration'])) {
 			if(substr($mediafile, 0, strlen('Podango:')) == 'Podango:') {
 				$fileNameParts = explode(':', $mediafile);
 				$mediafile = 'http://download.podango.com/mediatracker/555/'.$fileNameParts[3].'/'.$fileNameParts[4];

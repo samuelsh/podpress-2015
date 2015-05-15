@@ -43,7 +43,7 @@ License:
 	function podPress_siteurl($noDomain = false) {
 		if (!defined('PODPRESSSITEURL') || $noDomain) {
 			$result = '';
-			$urlparts = parse_url(get_settings('siteurl'));
+			$urlparts = parse_url(get_option('siteurl'));
 			if(!$noDomain) {
 				if(empty($urlparts['scheme'])) {
 					$urlparts['scheme'] = 'http';
@@ -82,7 +82,7 @@ License:
 			}
 			return PODPRESSURL;
 		} else {
-			$result = get_settings('siteurl');
+			$result = get_option('siteurl');
 			if(substr($result, -1, 1) != '/') {
 				$result .= '/';
 			}
@@ -330,20 +330,20 @@ License:
 	/* Functions for supporting the widgets */
 	/**************************************************************/
 	function podPress_loadWidgets () {
-		if ( !function_exists('register_sidebar_widget') || !function_exists('register_widget_control') ) {
+		if ( !function_exists('wp_register_sidebar_widget') || !function_exists('wp_register_widget_control') ) {
 			return;
 		}
 		// Tell Dynamic Sidebar about our new widget and its control
-		register_sidebar_widget(array('Feed Buttons', 'widgets'), 'podPress_feedButtons');
-		register_widget_control(array('Feed Buttons', 'widgets'), 'podPress_feedButtons_control', 300, 200);
+		wp_register_sidebar_widget('pp_feed_buttons', 'Feed Buttons', 'podPress_feedButtons');
+		wp_register_widget_control('pp_feed_buttons', 'Feed Buttons', 'podPress_feedButtons_control', 300, 200);
 
 		// Tell Dynamic Sidebar about our new widget and its control
-		register_sidebar_widget(array('XSPF Player', 'widgets'), 'podPress_xspfPlayer');
-		register_widget_control(array('XSPF Player', 'widgets'), 'podPress_xspfPlayer_control', 300, 200);
+		wp_register_sidebar_widget('pp_xspf_player', 'XSPF Player', 'podPress_xspfPlayer');
+		wp_register_widget_control('pp_xspf_player', 'XSPF Player', 'podPress_xspfPlayer_control', 300, 200);
 	}
 
 	function podPress_feedButtons_control() {
-		GLOBAL $podPress;
+		global $podPress;
 		$options = $newoptions = get_option('widget_podPressFeedButtons');
 		if ( $_POST["podPressFeedButtons-submit"] ) {
 			$newoptions['blog'] = isset($_POST['podPressFeedButtons-blog']);

@@ -525,7 +525,8 @@ License:
 				reset($input->podPressMedia);
 				while (list($key) = each($input->podPressMedia)) {
 					if(!empty($input->podPressMedia[$key]['URI'])) {
-						if($input->podPressMedia[$key]['premium_only'] == 'on' || $input->podPressMedia[$key]['premium_only'] == true) {
+						if(isset($input->podPressMedia[$key]['premium_only']) 
+								&& ($input->podPressMedia[$key]['premium_only'] == 'on' || $input->podPressMedia[$key]['premium_only'] == true)) {
 							$input->podPressMedia[$key]['content_level'] = 'premium_content';
 						} elseif(!isset($input->podPressMedia[$key]['content_level'])) {
 							$input->podPressMedia[$key]['content_level'] = 'free';
@@ -703,15 +704,15 @@ License:
 				
 // BB Dev: intel <-
 // alreadyOpen
-				if($this->settings['alreadyOpen']) {
+				if(isset($this->settings['alreadyOpen'])) {
 					$post->podPressMedia[$key]['alreadyOpen'] = true;
 				}
 // BB Dev: intel ->
 
-				if($post->podPressMedia[$key]['feedonly'] == 'on') {
+				if(isset($post->podPressMedia[$key]['feedonly']) && $post->podPressMedia[$key]['feedonly'] == 'on') {
 					continue;
 				}
-				$post->podPressMedia[$key]['title'] = htmlentities(stripslashes($post->podPressMedia[$key]['title']), ENT_QUOTES, get_settings('blog_charset'));
+				$post->podPressMedia[$key]['title'] = htmlentities(stripslashes($post->podPressMedia[$key]['title']), ENT_QUOTES, get_option('blog_charset'));
 				$post->podPressMedia[$key]['stats'] = false;
 				if($this->settings['enableStats']) {
 					$pos = strrpos($post->podPressMedia[$key]['URI'], '/');
@@ -824,7 +825,7 @@ License:
 						}
 					}
 				}
-				if($post->podPressMedia[$key]['disablePlayer']) {
+				if(isset($post->podPressMedia[$key]['disablePlayer'])) {
 					$post->podPressMedia[$key]['enablePlayer'] = false;
 					$post->podPressMedia[$key]['enablePopup'] = false;
 				} 
