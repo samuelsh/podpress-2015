@@ -1143,7 +1143,7 @@ BB Dev */
 		}
 
 		function post_edit($post_id) {
-			GLOBAL $post;
+			global $post;
 			if($this->justposted) {
 				return;
 			}

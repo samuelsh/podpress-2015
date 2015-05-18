@@ -559,7 +559,7 @@ if (! class_exists ( 'podPress_class' )) {
  * **********************************************************
  */
 
-if (! isset ( $podPress ) /*|| !is_object ($podPress)*/) {
+if (! class_exists( 'podPress' ) /*|| !is_object ($podPress)*/) {
 	if (get_option ( 'podPress_version' ) < PODPRESS_VERSION) {
 		$podPress_inUpgrade = true;
 	} else {

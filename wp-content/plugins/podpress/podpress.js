@@ -41,7 +41,7 @@
 			numHeight = 267; //BB Dev
 		}
 		if (typeof strPreviewImg == 'undefined') {
-			strPreviewImg = podPressDefaultPreviewImage;
+			strPreviewImg = "<?php echo(plugin_dir_url( __FILE__ ).'images/vpreview_center.png'); ?>";
 		}
 		if (typeof bPreviewOnly == 'undefined') {
 			bPreviewOnly = false;
@@ -69,7 +69,7 @@
 		strResult += '<td class="podPress_previewImage" colspan="3" style="width: '+numWidth+'px;">';
 		strResult += '<img class="#podPress_previewImage" src="'+strPreviewImg+'" border="0" width="'+numWidth+'" height="'+numHeight+'" alt="previewImg"  id="podPress_previewImageIMG_'+strPlayerDiv+'"';
 		if(!bPreviewOnly) {
-			strResult += ' onclick="javascript: podPressShowHidePlayer('+strPlayerDiv+', \''+strMediaFile+'\', '+numWidth+', '+numHeight+', \'force\'); return false;"';
+			strResult += ' onclick="javascript: podPressShowHidePlayer('+strPlayerDiv+', \''+strMediaFile+'\', '+numWidth+', '+numHeight+', \'force\', ' + strPreviewImg + '); return false;"';
 		}
 		strResult += '/>';
 		strResult += '</td>';
@@ -100,6 +100,12 @@
 		if(strAutoStart == 'nopreview') {
 			return '';
 		}
+			
+        // Som -->
+        if (typeof strPreviewImg == 'undefined') {
+            strPreviewImg = podPressBackendURL+'images/vpreview_center_text.png';
+        }
+        
 		var lenOfMedia = strMediaFile.length;
 		if(strMediaFile.substring(lenOfMedia-8, lenOfMedia) == '.youtube') {
 			var strExt = 'youtube';
@@ -152,18 +158,34 @@
 						var strMimeType = 'video/quicktime';
 						break;
 				}
-				strResult = '<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'+numWidth+'" height="'+numHeight+'" codebase="http://www.apple.com/qtactivex/qtplugin.cab">';
-				strResult += '	<param name="src" value="'+strMediaFile+'" />';
-				strResult += '	<param name="href" value="'+strMediaFile+'" />';
-				strResult += '	<param name="scale" value="aspect" />';
-				strResult += '	<param name="controller" value="true" />';
-				strResult += '	<param name="autoplay" value="'+strAutoStart+'" />';
-				strResult += '	<param name="bgcolor" value="000000" />';
-				strResult += '	<param name="pluginspage" value="http://www.apple.com/quicktime/download/" />';
-				strResult += '	<embed src="'+strMediaFile+'" width="'+numWidth+'" height="'+numHeight+'" scale="aspect" cache="true" bgcolor="000000" autoplay="'+strAutoStart+'" controller="true" src="'+strMediaFile+'" type="'+strMimeType+'" pluginspage="http://www.apple.com/quicktime/download/"></embed>';
-				strResult += '</object><br/><br/>';
+//				strResult = '<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'+numWidth+'" height="'+numHeight+'" codebase="http://www.apple.com/qtactivex/qtplugin.cab">';
+//				strResult += '	<param name="src" value="'+strMediaFile+'" />';
+//				strResult += '	<param name="href" value="'+strMediaFile+'" />';
+//				strResult += '	<param name="scale" value="aspect" />';
+//				strResult += '	<param name="controller" value="true" />';
+//				strResult += '	<param name="autoplay" value="'+strAutoStart+'" />';
+//				strResult += '	<param name="bgcolor" value="000000" />';
+//				strResult += '	<param name="pluginspage" value="http://www.apple.com/quicktime/download/" />';
+//				strResult += '	<embed src="'+strMediaFile+'" width="'+numWidth+'" height="'+numHeight+'" scale="aspect" cache="true" bgcolor="000000" autoplay="'+strAutoStart+'" controller="true" src="'+strMediaFile+'" type="'+strMimeType+'" pluginspage="http://www.apple.com/quicktime/download/"></embed>';
+//				strResult += '</object><br/><br/>';
+		 
+				if(strAutoStart)
+					var autoplay = "autoplay";
+				else
+					var autoplay = "";
+				
+				strResult = '<video ' + autoplay + ' controls poster="' + strPreviewImg + '" width="' + numWidth + '" height="' + numHeight + '">';
+				strResult += '<source src="' + strMediaFile + '" type="video/mp4" />';
+				strResult += '<object type="application/x-shockwave-flash" data="http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf" width="' + numWidth + '" height="' + numHeight + '">';
+				strResult += 	'<param name="movie" value="http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf" />';
+				strResult += 	'<param name="allowFullScreen" value="true" />';
+				strResult += 	'<param name="wmode" value="transparent" />';
+				strResult += 	'<param name="flashVars" value="config={\'playlist\':[\'' + strPreviewImg + '\',{\'url\':\'' + strMediaFile +  '\',\'autoPlay\':' + strAutoStart + '}]}" />';
+				strResult += 	'<img alt="" src="' + strPreviewImg + '" width="' + numWidth + '" height="' + numHeight + '" title="No video playback capabilities, please download the video below" />';
+				strResult += '</object>';
+				strResult += '</video>';
 				break;
-
+				// Som <--
 			//case 'wma': //BB Dev 
 			//case 'asf': //BB Dev
 			case 'wmv':
@@ -185,7 +207,6 @@
 
 			case 'wma': //BB Dev ->
 			case 'asf':
-			case 'mp3':
 				strResult = '<object id="winplayer" style="display:block;" classid="clsid:6BF52A52-394A-11d3-B153-00C04F79FAA6" width="'+numWidth+'" height="160" standby="Media is loading..." type="application/x-oleobject">';
 				strResult += '	<param name="url" value="'+strMediaFile+'" />';
 				strResult += '	<param name="AutoStart" value="'+strAutoStart+'" />';
@@ -202,7 +223,31 @@
 				strResult += '	<embed type="application/x-mplayer2" src="'+strMediaFile+'" width="'+320+'" height="'+65+'" scale="aspect" AutoStart="'+strAutoStart+'" ShowDisplay="0" ShowStatusBar="0" uiMode="full" AutoSize="1" AnimationAtStart="1" AllowChangeDisplaySize="1" ShowControls="1"></embed>';
 				strResult += '</object><br/><br/>';
 				break; // BB Dev <-
-
+				
+			// Som -->
+			case 'mp3':
+				
+				if(strAutoStart)
+					var autoplay = "autoplay";
+				else
+					var autoplay = "";
+				
+				strResult = '<audio controls ' + autoplay + '>';
+				strResult += '<source type="audio/mpeg" src="' + strMediaFile + '" />';
+				strResult += '<object type="application/x-shockwave-flash" data="http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf" width="320" height="65">';
+				strResult += 	'<param name="movie" value="http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf" />';
+				strResult += 	'<param name="allowFullScreen" value="false" />';
+				strResult +=	'<param name="allowscriptaccess" value="always" />';
+				strResult += 	'<param name="wmode" value="window" />';
+				strResult += 	'<param name="menu" value="true" />';
+				strResult += 	'<param name="play" value="true" />';
+				strResult += 	'<param name="flashVars" value="config={\'clip\':\'' + strMediaFile + '\'}" />';
+				strResult += 	'<img alt="" src="' + strPreviewImg + '" width="' + 320 + '" height="' + 65 + '" title="No video playback capabilities, please download the video below" />';
+				strResult += '</object>';
+				strResult += '</audio>';
+				break;
+			// Som <--
+				
 			case 'swf':
 				if(strAutoStart == 'true') {
 					strAutoStart = '';
@@ -313,7 +358,7 @@
 
 		if(bForceShow) {
 			refPlayerDivLink.innerHTML=podPressText_HidePlayer;
-			refPlayerDivLink.parentNode.onclick = function(){ podPressShowHidePlayer(strPlayerDiv, strMediaFile, numWidth, numHeight, 'true'); return false; };
+			refPlayerDivLink.parentNode.onclick = function(){ podPressShowHidePlayer(strPlayerDiv, strMediaFile, numWidth, numHeight, 'true', strPreviewImg); return false; };
 			refPlayerDiv.style.display='block';
 		} else {
 			if(refPlayerDivLink.innerHTML == podPressText_PlayNow) {
@@ -330,7 +375,7 @@
 					refPlayerDiv.innerHTML='';
 				}
 				bForceShow = true;
-				refPlayerDivLink.parentNode.onclick = function(){ podPressShowHidePlayer(strPlayerDiv, strMediaFile, numWidth, numHeight, 'force'); return false; };
+				refPlayerDivLink.parentNode.onclick = function(){ podPressShowHidePlayer(strPlayerDiv, strMediaFile, numWidth, numHeight, 'force', strPreviewImg); return false; };
 				return true;
 			}
 		}
@@ -365,7 +410,7 @@
 			} else {
 				refPlayerDiv.innerHTML='';
 			}
-			refPlayerDivLink.parentNode.onclick = function(){ podPressShowHidePlayer(strPlayerDiv, strMediaFile, numWidth, numHeight, 'force'); return false; };
+			refPlayerDivLink.parentNode.onclick = function(){ podPressShowHidePlayer(strPlayerDiv, strMediaFile, numWidth, numHeight, 'force', strPreviewImg); return false; };
 		}
 
 		var strResult = '<HTML>\n';
