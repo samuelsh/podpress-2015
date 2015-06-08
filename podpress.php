@@ -162,7 +162,7 @@ if (file_exists ( ABSPATH . PLUGINDIR . '/podpress.php' )) {
 
 if (! class_exists ( 'podPress_class' )) {
 	if (function_exists ( 'load_plugin_textdomain' )) {
-		load_plugin_textdomain ( 'podpress', false, PLUGINDIR . '/podpress' );
+		load_plugin_textdomain ( 'podpress', false, dirname( plugin_basename( __FILE__ ) ) );
 	}
 	require_once (ABSPATH . PLUGINDIR . '/podpress/podpress_class.php');
 	podPress_checkmem ( 'podPress base class included' );
