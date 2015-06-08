@@ -102,7 +102,7 @@ License:
 						$uri = $val['URI'];
 					}
 
-					$podPressContent .= "<a href=\"#\" onclick=\"javascript: podPressShowHidePlayer('".$GLOBALS['podPressPlayer']."','".$uri."',".$val['dimensionW'].",".$val['dimensionH'].",'true'); return false;\"><span id=\"podPressPlayerSpace_".$GLOBALS['podPressPlayer']."_PlayLink\">".__('Открыть', 'podpress')."</span></a>";
+					$podPressContent .= "<a href=\"#\" onclick=\"javascript: podPressShowHidePlayer('".$GLOBALS['podPressPlayer']."','".$uri."',".$val['dimensionW'].",".$val['dimensionH'].",'true'); return false;\"><span id=\"podPressPlayerSpace_".$GLOBALS['podPressPlayer']."_PlayLink\">".__('Play Now', 'podpress')."</span></a>";
 					$dividerNeeded = true;
 					if($podPress->settings['contentAutoDisplayPlayer']) {
 					$podPressPlayBlockScripts .= "podPressShowHidePlayer('".$GLOBALS['podPressPlayer']."', '".uri."',".$val['dimensionW'].",".$val['dimensionH'].", '".$previewVal."', '".$val['previewImage']."');\n"; // BB Dev: grisha
