@@ -279,6 +279,8 @@ if (! class_exists ( 'podPress_class' )) {
 			}
 		}
 		echo '<script type="text/javascript" src="' . podPress_url () . 'podpress.js"></script>' . "\n";
+		// samuels (c): adding connector with wpematico plugin to enable call of podPressShowHidePlayer method
+		echo '<script type="text/javascript" src="' . podPress_url () . 'podpress_wpematico_connector.js"></script>' . "\n";
 		echo '<script type="text/javascript"><!--' . "\n";
 		echo 'var podPressBackendURL = location.protocol;' . "\n";
 		echo 'if(location.port != "80" && location.port != "443") {podPressBackendURL = podPressBackendURL+location.port; } ' . "\n";
